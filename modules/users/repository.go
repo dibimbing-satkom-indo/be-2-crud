@@ -14,7 +14,7 @@ func (r Repository) Save(user *User) error {
 
 func (r Repository) FindAll() ([]User, error) {
 	var users []User
-	err := r.db.Find(&users).Error
+	err := r.db.Preload("Collections").Order("id").Find(&users).Error
 	return users, err
 }
 

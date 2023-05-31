@@ -15,9 +15,15 @@ type CreateResponse struct {
 	Data    UserItemResponse `json:"data"`
 }
 
-type UserItemResponse struct {
+type CollectionItemResponse struct {
 	ID   uint   `json:"id"`
 	Name string `json:"name"`
+}
+
+type UserItemResponse struct {
+	ID          uint                     `json:"id"`
+	Name        string                   `json:"name"`
+	Collections []CollectionItemResponse `json:"collections"`
 }
 
 func (c Controller) Create(req *CreateRequest) (*CreateResponse, error) {
@@ -50,10 +56,17 @@ func (c Controller) Read() (*ReadResponse, error) {
 
 	res := &ReadResponse{}
 	for _, user := range users {
-		res.Data = append(res.Data, UserItemResponse{
+		item := UserItemResponse{
 			ID:   user.ID,
 			Name: user.Name,
-		})
+		}
+		for _, collection := range user.Collections {
+			item.Collections = append(item.Collections, CollectionItemResponse{
+				ID:   collection.ID,
+				Name: collection.Name,
+			})
+		}
+		res.Data = append(res.Data, item)
 	}
 
 	return res, nil

@@ -27,7 +27,7 @@ func DefaultRequestHandler(db *gorm.DB) *RequestHandler {
 }
 
 type CreateRequest struct {
-	Name string `json:"name"`
+	Name string `json:"name" binding:"required"`
 }
 
 type ErrorResponse struct {
